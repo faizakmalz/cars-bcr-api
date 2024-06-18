@@ -6,6 +6,11 @@ class CarsService {
     return await carsRepository.getAllCars();
   }
 
+  async filterCars(filterCriteria: { capacity?: number; available?: boolean }) {
+    return await carsRepository.getFilteredCars(filterCriteria);
+  }
+  
+
   async getAvailableCars() {
     return await carsRepository.getAvailableCars();
   }
@@ -19,7 +24,12 @@ class CarsService {
   }
 
   async updateCar(id: string, car: Partial<CarsModel>) {
-    return await carsRepository.updateCar(id, car);
+    try {
+      return await carsRepository.updateCar(id, car);
+    } catch (error) {
+      console.error('Error in service updateCar:', error);
+      throw error;
+    }
   }
 
   async softDeleteCar(id: string, deletedBy: string) {

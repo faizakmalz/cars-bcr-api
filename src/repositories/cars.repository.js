@@ -22,6 +22,18 @@ class CarsRepository {
             }
         });
     }
+    getFilteredCars(filterCriteria) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let query = cars_model_1.CarsModel.query();
+            if (filterCriteria.available !== undefined) {
+                query = query.where("available", filterCriteria.available);
+            }
+            if (filterCriteria.capacity !== undefined) {
+                query = query.andWhere("capacity", filterCriteria.capacity);
+            }
+            return yield query;
+        });
+    }
     getAvailableCars() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield cars_model_1.CarsModel.query().whereNull("deletedAt").andWhere("available", true);
@@ -29,7 +41,7 @@ class CarsRepository {
     }
     getCarById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield cars_model_1.CarsModel.query().findById(id).whereNull("deletedAt");
+            return yield cars_model_1.CarsModel.query().findById(id);
         });
     }
     createCar(car) {
@@ -39,7 +51,15 @@ class CarsRepository {
     }
     updateCar(id, car) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield cars_model_1.CarsModel.query().patchAndFetchById(id, car).whereNull("deletedAt");
+            try {
+                const updatedCar = yield cars_model_1.CarsModel.query()
+                    .patchAndFetchById(id, car);
+                return updatedCar;
+            }
+            catch (error) {
+                console.error('Error in repository updateCar:', error);
+                throw error;
+            }
         });
     }
     softDeleteCar(id, deletedBy) {

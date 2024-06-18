@@ -35,6 +35,19 @@ class CarsController {
             }
         });
     }
+    getFilteredCars(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const filterCriteria = req.body;
+                const filteredCars = yield cars_service_1.carsService.filterCars(filterCriteria);
+                return res.status(200).json(filteredCars);
+            }
+            catch (error) {
+                console.error(error);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+    }
     getCarById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
@@ -53,7 +66,27 @@ class CarsController {
     createCar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const carData = Object.assign(Object.assign({}, req.body), { createdBy: (0, crypto_1.randomUUID)(), updatedBy: (0, crypto_1.randomUUID)(), deletedBy: (0, crypto_1.randomUUID)(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), deletedAt: new Date().toISOString() });
+                const carData = {
+                    model: req.body.model,
+                    manufacture: req.body.manufacture,
+                    plate: req.body.plate,
+                    image: '/path', // save the file path
+                    rentPerDay: parseInt(req.body.rentPerDay, 10),
+                    capacity: parseInt(req.body.capacity, 10),
+                    description: req.body.description,
+                    transmission: req.body.transmission,
+                    type: req.body.type,
+                    year: req.body.year,
+                    available: true,
+                    options: ['Air Conditioning', 'GPS'],
+                    specs: ['100hp', '1.5L Engine'],
+                    createdBy: (0, crypto_1.randomUUID)(),
+                    updatedBy: (0, crypto_1.randomUUID)(),
+                    deletedBy: (0, crypto_1.randomUUID)(),
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    deletedAt: new Date().toISOString()
+                };
                 const car = yield cars_service_1.carsService.createCar(carData);
                 res.status(201).json(car);
             }
@@ -65,16 +98,38 @@ class CarsController {
     updateCar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
+            const { model, manufacture, plate, image, rentPerDay, capacity, description, transmission, type, year } = req.body;
+            const userId = req.user.id; // Assuming req.user contains the authenticated user's data
+            if (!model || !manufacture || !plate || !rentPerDay || !capacity || !description || !transmission || !type || !year) {
+                return res.status(400).json({ message: 'All fields are required' });
+            }
+            const carData = {
+                model,
+                manufacture,
+                plate,
+                image: image || '/default/path', // Handle if image is not provided
+                rentPerDay: parseInt(rentPerDay, 10),
+                capacity: parseInt(capacity, 10),
+                description,
+                transmission,
+                type,
+                year,
+                available: true,
+                options: ['Air Conditioning', 'GPS'], // Make sure this is dynamic if needed
+                specs: ['100hp', '1.5L Engine'], // Make sure this is dynamic if needed
+                updatedBy: userId, // Use authenticated user's ID
+                updatedAt: new Date().toISOString(),
+            };
             try {
-                const carData = Object.assign(Object.assign({}, req.body), { updatedBy: (0, crypto_1.randomUUID)(), updatedAt: new Date().toISOString() });
                 const car = yield cars_service_1.carsService.updateCar(id, carData);
                 if (!car) {
-                    return res.status(404).json({ message: "Car not found" });
+                    return res.status(404).json({ message: 'Car not found' });
                 }
                 res.json(car);
             }
             catch (error) {
-                res.status(500).json({ message: "Error updating car" });
+                console.error('Error updating car:', error);
+                res.status(500).json({ message: 'Error updating car' });
             }
         });
     }

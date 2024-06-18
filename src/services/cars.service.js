@@ -17,6 +17,11 @@ class CarsService {
             return yield cars_repository_1.carsRepository.getAllCars();
         });
     }
+    filterCars(filterCriteria) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield cars_repository_1.carsRepository.getFilteredCars(filterCriteria);
+        });
+    }
     getAvailableCars() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield cars_repository_1.carsRepository.getAvailableCars();
@@ -34,7 +39,13 @@ class CarsService {
     }
     updateCar(id, car) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield cars_repository_1.carsRepository.updateCar(id, car);
+            try {
+                return yield cars_repository_1.carsRepository.updateCar(id, car);
+            }
+            catch (error) {
+                console.error('Error in service updateCar:', error);
+                throw error;
+            }
         });
     }
     softDeleteCar(id, deletedBy) {

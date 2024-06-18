@@ -1,3 +1,4 @@
+import { query } from "express";
 import { CarsModel } from "../models/cars.model";
 
 class CarsRepository {
@@ -10,12 +11,23 @@ class CarsRepository {
 
   }
 
+  async getFilteredCars(filterCriteria: { capacity?: number; available?: boolean }) {
+    let query = CarsModel.query();
+    if (filterCriteria.available !== undefined) {
+      query = query.where("available", filterCriteria.available);
+    }
+    if (filterCriteria.capacity !== undefined) {
+      query = query.andWhere("capacity", filterCriteria.capacity);
+    }
+    return await query;
+  }
+
   async getAvailableCars() {
     return await CarsModel.query().whereNull("deletedAt").andWhere("available", true);
   }
 
   async getCarById(id: string) {
-    return await CarsModel.query().findById(id).whereNull("deletedAt");
+    return await CarsModel.query().findById(id);
   }
 
   async createCar(car: Partial<CarsModel>) {
@@ -23,7 +35,15 @@ class CarsRepository {
   }
 
   async updateCar(id: string, car: Partial<CarsModel>) {
-    return await CarsModel.query().patchAndFetchById(id, car).whereNull("deletedAt");
+    try {
+      const updatedCar = await CarsModel.query()
+        .patchAndFetchById(id, car)
+        ;
+      return updatedCar;
+    } catch (error) {
+      console.error('Error in repository updateCar:', error);
+      throw error;
+    }
   }
 
   async softDeleteCar(id: string, deletedBy: string) {
