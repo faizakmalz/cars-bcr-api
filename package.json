@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
-    "migrate": "npx knex migrate:latest",
-    "seed": "npx knex seed:make dev",
-    "seed-run": "npx knex seed:run",
+    "migrate": "ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js migrate:latest --knexfile ./src/knexfile.ts",
+    "rollback": "ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js migrate:rollback --knexfile ./src/knexfile.ts",
+
+    "seed-run": "ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js seed:run --knexfile ./src/knexfile.ts",
     "start": "node index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,6 +20,7 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
@@ -37,6 +38,7 @@
     "@types/pg": "^8.11.6",
     "concurrently": "^8.2.2",
     "nodemon": "^3.1.3",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.5"
   }
 }

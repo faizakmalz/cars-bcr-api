@@ -1,6 +1,6 @@
 import { knex } from "knex";
 import { Model } from "objection";
-import config from "../../knexfile";
+import config from "../knexfile";
 
 console.log("Initializing Knex instance");
 
