@@ -48,26 +48,27 @@ class CarsController {
 
   async createCar(req: Request, res: Response) {
     try {
+      const image = req.file ? `/uploads/${req.file.filename}` : `path`; // Ensure this path is correct
       const carData = {
         model: req.body.model,
-      manufacture: req.body.manufacture,
-      plate: req.body.plate,
-      image: req.file?.path, // save the file path
-      rentPerDay: parseInt(req.body.rentPerDay, 10),
-      capacity: parseInt(req.body.capacity, 10),
-      description: req.body.description,
-      transmission: req.body.transmission,
-      type: req.body.type,
-      year: req.body.year,
-      available: true,
-      options: ['Air Conditioning', 'GPS'],
-      specs: ['100hp', '1.5L Engine'],
-      createdBy: randomUUID(),
-      updatedBy: randomUUID(),
-      deletedBy: randomUUID(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      deletedAt: new Date().toISOString()
+        manufacture: req.body.manufacture,
+        plate: req.body.plate,
+        image: image, // save the file path
+        rentPerDay: parseInt(req.body.rentPerDay, 10),
+        capacity: parseInt(req.body.capacity, 10),
+        description: req.body.description,
+        transmission: req.body.transmission,
+        type: req.body.type,
+        year: req.body.year,
+        available: true,
+        options: ['Air Conditioning', 'GPS'],
+        specs: ['100hp', '1.5L Engine'],
+        createdBy: randomUUID(),
+        updatedBy: randomUUID(),
+        deletedBy: randomUUID(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        deletedAt: new Date().toISOString()
       };
       const car = await carsService.createCar(carData);
       res.status(201).json(car);
@@ -75,6 +76,7 @@ class CarsController {
       res.status(500).json({ message: "Error creating car" });
     }
   }
+  
 
   async updateCar(req: Request, res: Response) {
     const { id } = req.params;
