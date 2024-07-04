@@ -25,8 +25,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(Router);
-app.use('/uploads', express.static(uploadsDir));
-
+app.use('/uploads', express.static(uploadsDir)); // Serve static files
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

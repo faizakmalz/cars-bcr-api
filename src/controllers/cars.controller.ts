@@ -48,7 +48,7 @@ class CarsController {
 
   async createCar(req: Request, res: Response) {
     try {
-      const image = req.file ? `/uploads/${req.file.filename}` : `path`; // Ensure this path is correct
+      const image = req.file ? `uploads/${req.file.filename}` : 'path'; // Correct path
       const carData = {
         model: req.body.model,
         manufacture: req.body.manufacture,
@@ -68,7 +68,7 @@ class CarsController {
         deletedBy: randomUUID(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        deletedAt: new Date().toISOString()
+        deletedAt: new Date().toISOString(),
       };
       const car = await carsService.createCar(carData);
       res.status(201).json(car);
