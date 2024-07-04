@@ -5,12 +5,22 @@ import { randomUUID } from "crypto";
 class CarsController {
   async getAllCars(req: Request, res: Response) {
     try {
-      const cars = await carsService.getAllCars();
-      res.json(cars);
+        const cars = await carsService.getAllCars();
+        if (!cars) {
+            return res.status(404).json({ message: 'No cars found' });
+        }
+        // Adjust the image path for each car
+        const carsWithImageUrl = cars.map(car => ({
+            ...car,
+            image: car.image ? `/uploads/${car.image.split('/').pop()}` : null,
+        }));
+        res.status(200).json(carsWithImageUrl);
     } catch (error) {
-      res.status(500).json({ message: "Error retrieving cars" });
+        res.status(500).json({ message: 'Error fetching cars' });
     }
-  }
+}
+
+
 
   async getAvailableCars(req: Request, res: Response) {
     try {
