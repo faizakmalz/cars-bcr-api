@@ -65,12 +65,13 @@ class CarsController {
     }
     createCar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
                 const carData = {
                     model: req.body.model,
                     manufacture: req.body.manufacture,
                     plate: req.body.plate,
-                    image: '/path', // save the file path
+                    image: (_a = req.file) === null || _a === void 0 ? void 0 : _a.path, // save the file path
                     rentPerDay: parseInt(req.body.rentPerDay, 10),
                     capacity: parseInt(req.body.capacity, 10),
                     description: req.body.description,

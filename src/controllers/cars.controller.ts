@@ -52,7 +52,7 @@ class CarsController {
         model: req.body.model,
       manufacture: req.body.manufacture,
       plate: req.body.plate,
-      image: '/path', // save the file path
+      image: req.file?.path, // save the file path
       rentPerDay: parseInt(req.body.rentPerDay, 10),
       capacity: parseInt(req.body.capacity, 10),
       description: req.body.description,

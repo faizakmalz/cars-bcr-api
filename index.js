@@ -9,7 +9,13 @@ require("./src/database/index");
 const router_1 = __importDefault(require("./src/routes/router"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 dotenv_1.default.config();
+const uploadsDir = path_1.default.join(__dirname, 'uploads');
+if (!fs_1.default.existsSync(uploadsDir)) {
+    fs_1.default.mkdirSync(uploadsDir);
+}
 const app = (0, express_1.default)();
 const PORT = process.env.DB_PORT;
 const pw = process.env.DB_PASSWORD;
