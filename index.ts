@@ -4,15 +4,10 @@ import "./src/database/index";
 import Router from "./src/routes/router";
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path from "path";
-import fs from 'fs';
 
 dotenv.config();
 
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-}
+
 
 const app = express();
 const PORT = process.env.DB_PORT;
@@ -25,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(Router);
-app.use('/uploads', express.static(uploadsDir)); // Serve static files
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
