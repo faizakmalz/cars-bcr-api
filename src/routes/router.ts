@@ -7,7 +7,7 @@ import express from "express";
 
 const router = Router();
 
-const uploadsDir = path.join(__dirname, 'uploads');
+const uploadsDir = path.join(__dirname, '../uploads');
 
 
 router.use("/api/v1", authRoutes);
