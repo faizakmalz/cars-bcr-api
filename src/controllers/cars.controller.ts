@@ -6,9 +6,16 @@ class CarsController {
   async getAllCars(req: Request, res: Response) {
     try {
       const cars = await carsService.getAllCars();
-      res.json(cars);
+      if (!cars || !Array.isArray(cars)) {
+        throw new Error('Fetched data is not an array');
+      }
+      const carsWithImageUrl = cars.map(car => ({
+        ...car,
+        image: car.image ? `https://resulting-roby-synrgy7-faza-1307d6b4.koyeb.app/uploads/${car.image}` : 'null',
+      }));
+      res.status(200).json(carsWithImageUrl);
     } catch (error) {
-      res.status(500).json({ message: "Error retrieving cars" });
+      res.status(500).json({ message: 'Error fetching cars'});
     }
   }
 
