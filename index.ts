@@ -5,8 +5,24 @@ import Router from "./src/routes/router";
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from "path";
+import multer from 'multer';
+
 
 dotenv.config();
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'uploads'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
+
+export default upload;
 
 
 

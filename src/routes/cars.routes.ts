@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { carsController } from "../controllers/cars.controller";
 import { authenticate, authorize } from "../middlewares/auth.middleware";
-import upload from "../middlewares/uploads.middleware";
+import upload from "../../index";
 
 const router = Router();
 
