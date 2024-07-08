@@ -45,6 +45,17 @@ class AuthService {
             }
         });
     }
+    // async loginGoogle(token: String) {
+    //   try {
+    //     const userData = {
+    //     }
+    //     const user = await usersRepository.createUser(userData);
+    //     const JWTtoken = generateToken(user)
+    //   } catch (error) {
+    //     console.error("Error logging in:", error);
+    //     throw new Error("Error logging in");
+    //   }
+    // }
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

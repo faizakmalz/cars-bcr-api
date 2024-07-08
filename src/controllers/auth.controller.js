@@ -11,6 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authController = void 0;
 const auth_service_1 = require("../services/auth.service");
+require("google-auth-library");
+const google_auth_library_1 = require("google-auth-library");
+const auth_util_1 = require("../utils/auth.util");
 class AuthController {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -43,6 +46,39 @@ class AuthController {
                     user: { email: user.email, role: user.role },
                     token,
                 });
+            }
+            catch (error) {
+                res.status(500).json({ message: "Error logging in" });
+            }
+        });
+    }
+    loginGoogle(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const client = new google_auth_library_1.OAuth2Client('1020414211454-vhqkl708cateej0qsl84knc1ok6kslr7.apps.googleusercontent.com');
+            try {
+                const { token } = req.body;
+                const ticket = yield client.verifyIdToken({
+                    idToken: token,
+                    audience: '1020414211454-vhqkl708cateej0qsl84knc1ok6kslr7.apps.googleusercontent.com'
+                });
+                const response = ticket.getPayload();
+                console.log(response);
+                const payload = {
+                    id: response.sub,
+                    role: 'user'
+                };
+                const JWTtoken = (0, auth_util_1.generateToken)(payload);
+                res.status(201).json({
+                    message: "Login successfully",
+                    token: JWTtoken,
+                });
+                return JWTtoken;
+                // const { user, token } = await authService.login(email, password);
+                // res.json({
+                //   message: "Login successfully",
+                //   user: { email: user.email, role: user.role },
+                //   token,
+                // });
             }
             catch (error) {
                 res.status(500).json({ message: "Error logging in" });

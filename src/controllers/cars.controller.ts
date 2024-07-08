@@ -55,7 +55,7 @@ class CarsController {
 
   async createCar(req: Request, res: Response) {
   try {
-    const image = req.file?.filename; // Ensure this path is correct
+    const image = req.file?.path; // Ensure this path is correct
     const carData = {
       model: req.body.model,
       manufacture: req.body.manufacture,

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authController } from "../controllers/auth.controller";
 import { authenticate, authorize, optionalAuthenticate } from "../middlewares/auth.middleware";
 import passport from "passport";
+import { auth } from "google-auth-library";
 
 const router = Router();
 
@@ -10,7 +11,8 @@ router.post("/login", authController.login.bind(authController));
 router.post("/logout", authenticate, authController.logout.bind(authController));
 router.get("/current-user", authenticate, authController.getCurrentUser.bind(authController));
 
-router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.post("/auth/google", authController.loginGoogle.bind(authController) );
+
 
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),

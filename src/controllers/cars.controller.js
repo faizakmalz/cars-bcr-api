@@ -17,10 +17,14 @@ class CarsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const cars = yield cars_service_1.carsService.getAllCars();
-                res.json(cars);
+                if (!cars || !Array.isArray(cars)) {
+                    throw new Error('Fetched data is not an array');
+                }
+                const carsWithImageUrl = cars.map(car => (Object.assign(Object.assign({}, car), { image: car.image ? `https://resulting-roby-synrgy7-faza-1307d6b4.koyeb.app/uploads/${car.image}` : 'null' })));
+                res.status(200).json(carsWithImageUrl);
             }
             catch (error) {
-                res.status(500).json({ message: "Error retrieving cars" });
+                res.status(500).json({ message: 'Error fetching cars' });
             }
         });
     }
@@ -67,11 +71,12 @@ class CarsController {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             try {
+                const image = (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename; // Ensure this path is correct
                 const carData = {
                     model: req.body.model,
                     manufacture: req.body.manufacture,
                     plate: req.body.plate,
-                    image: (_a = req.file) === null || _a === void 0 ? void 0 : _a.path, // save the file path
+                    image: image, // save the file path
                     rentPerDay: parseInt(req.body.rentPerDay, 10),
                     capacity: parseInt(req.body.capacity, 10),
                     description: req.body.description,
