@@ -13,7 +13,7 @@ dotenv.config();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'uploads'));
+    cb(null, path.join(__dirname, './src/uploads'));
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -37,7 +37,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(Router);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, './src/uploads')));
 
 
 

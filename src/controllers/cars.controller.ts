@@ -11,7 +11,7 @@ class CarsController {
       }
       const carsWithImageUrl = cars.map(car => ({
         ...car,
-        image: car.image ? `https://resulting-roby-synrgy7-faza-1307d6b4.koyeb.app/uploads/${car.image}` : 'null',
+        image: car.image ? `../uploads/${car.image}` : 'null',
       }));
       res.status(200).json(carsWithImageUrl);
     } catch (error) {
